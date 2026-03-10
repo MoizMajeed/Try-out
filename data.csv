@@ -1,10 +1,10 @@
-client_code,client_name,group_code,return_name,return_type,year,status,percent_complete,preparer,last_updated,message
-TXR-001,Ali Khan,"GRP-ACME,GRP-KHAN",Ali Khan – Individual,Individual,2025,Under Review,75,Moiz Majeed,2026-03-08,Your individual return is under review. Expected completion by March 15.
-TXR-002,Sara Ahmed,GRP-ACME,Sara Ahmed – Individual,Individual,2025,In Progress,50,Moiz Majeed,2026-03-06,We are working on your individual return.
-TXR-003,John Davis,GRP-ACME,John Davis – Individual,Individual,2025,Filed with IRS,100,Moiz Majeed,2026-03-01,Your return has been filed with the IRS.
-TXR-004,Lisa Park,GRP-ACME,Lisa Park – Individual,Individual,2025,Awaiting Documents,10,Moiz Majeed,2026-03-09,We need your W-2 and 1099 forms to begin.
-,,GRP-ACME,ACME LLC – Partnership Return,Partnership,2025,In Progress,60,Moiz Majeed,2026-03-07,Partnership return is being prepared. K-1s will be distributed once complete.
-TXR-001,Ali Khan,GRP-KHAN,Khan Family Trust,Trust,2025,Documents Received,30,Moiz Majeed,2026-03-05,Trust documents received. Beginning preparation.
-,,GRP-KHAN,Khan Family Foundation,Non-Profit,2025,In Progress,45,Moiz Majeed,2026-03-06,990 form preparation is underway.
-TXR-100,Horizon Ventures Ltd,,Horizon Ventures Ltd,Company,2025,Documents Received,25,Moiz Majeed,2026-03-09,All documents received. We will begin preparation this week.
-DEMO,Demo Client,,Demo Return,Individual,2025,In Progress,60,Moiz Majeed,2026-03-10,Demo entry. Try: TXR-001 (multi-group) TXR-002 TXR-003 TXR-004 TXR-100
+client_code,client_name,group_code,return_name,return_type,year,status,percent_complete,preparer,last_updated,message,email
+TXR-001,Ali Khan,"GRP-ACME,GRP-KHAN",Ali Khan – Individual,Individual,2025,Under Review,75,Moiz Majeed,3/8/2026,Your individual return is under review. Expected completion by March 15.,moiz.majeed@mayatax.com
+TXR-002,Sara Ahmed,GRP-ACME,Sara Ahmed – Individual,Individual,2025,In Progress,50,Rahul Moorani,3/6/2026,We are working on your individual return.,
+TXR-003,John Davis,GRP-ACME,John Davis – Individual,Individual,2025,Filed with IRS,100,Mohid Bin Abid,3/1/2026,Your return has been filed with the IRS.,
+TXR-004,Lisa Park,GRP-ACME,Lisa Park – Individual,Individual,2025,Awaiting Documents,10,Yaseen Bashir,3/9/2026,We need your W-2 and 1099 forms to begin.,
+,,GRP-ACME,ACME LLC – Partnership Return,Partnership,2025,In Progress,60,Maaz Maqsood,3/7/2026,Partnership return is being prepared. K-1s will be distributed once complete.,
+TXR-001,Ali Khan,GRP-KHAN,Khan Family Trust,Trust,2025,Documents Received,30,Shayan Asad,3/5/2026,Trust documents received. Beginning preparation.,
+,,GRP-KHAN,Khan Family Foundation,Non-Profit,2025,In Progress,45,Kamran Akbar,3/6/2026,990 form preparation is underway.,
+TXR-100,Horizon Ventures Ltd,,Horizon Ventures Ltd,Company,2025,Documents Received,25,Moiz Majeed,3/9/2026,All documents received. We will begin preparation this week.,
+,,,,,,,,,,,

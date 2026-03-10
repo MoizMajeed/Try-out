@@ -158,6 +158,19 @@
       <div class="error-msg" id="error-msg" style="display:none;"></div>
       <button class="lookup-btn" id="lookup-btn">View My Returns</button>
     </div>
+
+    <!-- RECEIVE CODE SECTION -->
+    <div class="fade-up d4" style="max-width:400px;margin:24px auto 0;">
+      <button id="toggle-email-lookup" style="background:none;border:none;font-size:13px;color:#777;cursor:pointer;text-decoration:underline;padding:4px;">Don't have your code? Look it up by email</button>
+      <div id="email-lookup-section" style="display:none;margin-top:16px;">
+        <label class="input-label">Your Email Address</label>
+        <input type="email" class="code-input" id="email-input" placeholder="name@example.com" autocomplete="email" style="font-size:15px;letter-spacing:0.01em;font-weight:500;" />
+        <div class="error-msg" id="email-error" style="display:none;"></div>
+        <div id="email-success" style="display:none;margin-top:12px;padding:16px 20px;background:#D1FAE5;border:1px solid #A7F3D0;border-radius:10px;text-align:left;">
+        </div>
+        <button class="lookup-btn" id="email-lookup-btn" style="background:#444;">Send My Code</button>
+      </div>
+    </div>
   </div>
   <div class="footer"><span id="footer-text"></span></div>
 </div>
@@ -242,6 +255,7 @@
       obj.preparer         = obj.preparer || obj.accountant || obj.prepared_by || obj.staff || "";
       obj.last_updated     = obj.last_updated || obj.lastupdated || obj.updated || obj.date || "";
       obj.message          = obj.message || obj.notes || obj.comment || obj.comments || "";
+      obj.email            = obj.email || obj.email_address || obj.emailaddress || obj.client_email || "";
 
       // Include rows that have a client_code OR a group_code (shared returns have no client_code)
       if (obj.client_code || obj.group_code) rows.push(obj);
@@ -457,6 +471,80 @@
   $input.addEventListener("keydown", e => { if (e.key === "Enter") doLookup(); });
   $input.addEventListener("input", () => { $input.value = $input.value.toUpperCase(); $error.style.display = "none"; });
   $backBtn.addEventListener("click", goBack);
+
+  // ─── EMAIL LOOKUP ───
+  const $toggleEmail   = document.getElementById("toggle-email-lookup");
+  const $emailSection  = document.getElementById("email-lookup-section");
+  const $emailInput    = document.getElementById("email-input");
+  const $emailError    = document.getElementById("email-error");
+  const $emailSuccess  = document.getElementById("email-success");
+  const $emailBtn      = document.getElementById("email-lookup-btn");
+
+  $toggleEmail.addEventListener("click", () => {
+    const showing = $emailSection.style.display !== "none";
+    $emailSection.style.display = showing ? "none" : "block";
+    $toggleEmail.textContent = showing ? "Don't have your code? Look it up by email" : "I already have my code";
+    $emailError.style.display = "none";
+    $emailSuccess.style.display = "none";
+  });
+
+  async function doEmailLookup() {
+    const email = $emailInput.value.trim().toLowerCase();
+    if (!email || !email.includes("@")) {
+      $emailError.textContent = "Please enter a valid email address.";
+      $emailError.style.display = "block";
+      $emailSuccess.style.display = "none";
+      return;
+    }
+    $emailBtn.disabled = true;
+    $emailBtn.textContent = "Looking up…";
+    $emailError.style.display = "none";
+    $emailSuccess.style.display = "none";
+
+    // Re-fetch fresh data
+    if (DATA_CSV_PATH) {
+      try {
+        const res = await fetch(DATA_CSV_PATH + "?_t=" + Date.now(), { cache: "no-store" });
+        if (res.ok) {
+          const text = await res.text();
+          if (!text.includes("<!DOCTYPE")) {
+            const parsed = parseCSV(text);
+            if (parsed.length > 0) allData = parsed;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // Find all unique client_codes for this email
+    const codes = new Set();
+    allData.forEach(r => {
+      const rowEmail = (r.email || "").trim().toLowerCase();
+      if (rowEmail === email && r.client_code) {
+        codes.add(r.client_code);
+      }
+    });
+
+    if (codes.size === 0) {
+      $emailError.textContent = "No account found with this email. Please contact us at " + FIRM.phone + " for assistance.";
+      $emailError.style.display = "block";
+    } else {
+      const codeList = Array.from(codes);
+      let html = '<div style="font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:#065F46;margin-bottom:8px;">Your Client Code' + (codeList.length > 1 ? 's' : '') + '</div>';
+      codeList.forEach(c => {
+        html += '<div style="font-size:22px;font-weight:700;letter-spacing:0.08em;color:#1a1a1a;font-family:monospace;margin-bottom:4px;">' + escapeHTML(c) + '</div>';
+      });
+      html += '<div style="font-size:12px;color:#555;margin-top:8px;">Enter ' + (codeList.length > 1 ? 'any of these codes' : 'this code') + ' above to view your returns.</div>';
+      $emailSuccess.innerHTML = html;
+      $emailSuccess.style.display = "block";
+    }
+
+    $emailBtn.disabled = false;
+    $emailBtn.textContent = "Send My Code";
+  }
+
+  $emailBtn.addEventListener("click", doEmailLookup);
+  $emailInput.addEventListener("keydown", e => { if (e.key === "Enter") doEmailLookup(); });
+  $emailInput.addEventListener("input", () => { $emailError.style.display = "none"; });
 
   initFirmDetails();
   loadData();
